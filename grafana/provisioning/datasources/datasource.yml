@@ -1,0 +1,41 @@
+# config file version
+apiVersion: 1
+
+deleteDatasources:
+  - name: Loki
+    orgId: 1
+  - name: Prometheus
+    orgId: 1
+
+datasources:
+  - name: Loki
+    type: loki
+    access: proxy
+    uid: loki
+    url: http://gigapipe:3100
+    editable: true
+    jsonData:
+      derivedFields:
+        - datasourceUid: tempo
+          matcherRegex: "^.*?traceI[d|D]=(\\w+).*$"
+          name: traceId
+          url: '$${__value.raw}'
+        - datasourceUid: tempo
+          matcherRegex: "^.*?\"traceID\":\"(\\w+)\".*$"
+          name: traceID
+          url: '$${__value.raw}'
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    uid: prometheus
+    url: http://gigapipe:3100
+    editable: true
+    basicAuth: false
+    jsonData:
+      httpMethod: GET
+      graphiteVersion: "1.1"
+      tlsAuth: false
+      tlsAuthWithCACert: false
+      cacheLevel: 'High'
+      incrementalQuerying: 'Enable'
+      incrementalQueryOverlapWindow: 2m

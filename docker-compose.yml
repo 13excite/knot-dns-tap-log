@@ -108,3 +108,19 @@ services:
         max-size: "10m"
         max-file: "5"
 
+  vector:
+    image: timberio/vector:latest-alpine
+    container_name: vector
+    restart: unless-stopped
+    networks:
+      - gigapipe-oss
+    volumes:
+      - ./vector/vector.toml:/etc/vector/vector.toml:ro
+    depends_on:
+      - gigapipe
+    logging:
+      driver: "local"
+      options:
+        max-size: "10m"
+        max-file: "5"
+

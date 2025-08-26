@@ -82,13 +82,12 @@ extensions:
   health_check:
   pprof:
   zpages:
-  pyroscope:
 
 service:
   telemetry:
     logs:
       level: "info"
-  extensions: [pprof, zpages, health_check, pyroscope]
+  extensions: [pprof, zpages, health_check]
   pipelines:
     logs:
       receivers: [otlp, loki]

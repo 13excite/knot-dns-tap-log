@@ -115,7 +115,7 @@ services:
     networks:
       - gigapipe-oss
     volumes:
-      - ./vector/vector.toml:/etc/vector/vector.toml:ro
+      - ./vector/vector.yaml:/etc/vector/vector.yaml:ro
     depends_on:
       - gigapipe
     logging:

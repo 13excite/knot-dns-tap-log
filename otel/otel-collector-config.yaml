@@ -28,12 +28,6 @@ receivers:
         endpoint: 0.0.0.0:14268
   zipkin:
     endpoint: 0.0.0.0:9411
-  skywalking:
-    protocols:
-      grpc:
-        endpoint: 0.0.0.0:11800
-      http:
-        endpoint: 0.0.0.0:12800
   prometheus:
     config:
       scrape_configs:

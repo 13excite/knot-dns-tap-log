@@ -115,7 +115,7 @@ services:
     networks:
       - gigapipe-oss
     volumes:
-      - ./vector/vector.yaml:/etc/vector/vector.yaml:ro
+      - ./vector/vector_demo.yaml:/etc/vector/vector.yaml:ro # demo vector config with syslog
     depends_on:
       - gigapipe
     logging:

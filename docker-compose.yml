@@ -89,7 +89,7 @@ services:
       options:
         max-size: "10m"
         max-file: "5"
-      
+
   otel-collector:
     container_name: otel-collector
     hostname: otel-collector
@@ -116,6 +116,8 @@ services:
       - gigapipe-oss
     volumes:
       - ./vector/vector_demo.yaml:/etc/vector/vector.yaml:ro # demo vector config with syslog
+    ports:
+      - "9553:9553"   # dnstap tcp listener
     depends_on:
       - gigapipe
     logging:

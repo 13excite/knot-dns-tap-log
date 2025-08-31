@@ -3,6 +3,11 @@ sources:
     type:   "demo_logs"
     format: "syslog"
     interval: 5.0
+  knot_dns:
+    type: dnstap
+    address: 0.0.0.0:9553
+    mode: tcp
+    host_key: "dns_host"
 
 transforms:
   remap_syslog:
@@ -12,6 +17,34 @@ transforms:
     source: |
             structured = parse_syslog!(.message)
             . = merge(., structured)
+
+  knot_dns_transform:
+    type: remap
+    inputs:
+      - knot_dns
+    source: |
+
+        message = .
+        .= {}
+        if message.messageType == "AuthQuery" {
+              .question = message.requestData.question
+              .rcodeName = message.requestData.rcodeName
+        }
+        if message.messageType == "AuthResponse" {
+              .answers = message.responseData.answers
+              .question = message.responseData.question
+              .rcodeName = message.responseData.rcodeName
+        }
+
+        .messageType = message.messageType
+        .responseAddress = message.responseAddress
+        .responsePort = message.responsePort
+        .server = message.serverId
+        .proto = message.socketProtocol
+        .sourceAddress = message.sourceAddress
+        .sourcePort = message.sourcePort
+        .timestamp = message.timestamp
+
 
 sinks:
   loki_syslog:
@@ -23,5 +56,15 @@ sinks:
       forwarder: "vector"
       event: "{{ facility }}"
       type: "syslog"
+    encoding:
+      codec: "json"
+  loki_knot:
+    type: loki
+    inputs:
+      - knot_dns_transform
+    endpoint: http://gigapipe:3100
+    labels:
+      forwarder: "vector"
+      type: "knot"
     encoding:
       codec: "json"

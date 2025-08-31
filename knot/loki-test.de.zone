@@ -1,0 +1,17 @@
+$TTL 86400
+$ORIGIN loki-test.de.
+
+@       IN      SOA     ns.loki-test.de. admin.loki-test.de. (
+              1736283955 ; Serial
+              3600 ; Refresh
+              1800   ; Retry
+              604800  ; Expire
+              86400 ) ; Minimum TTL
+
+        IN      NS      ns.loki-test.de.
+        IN      A       127.0.0.1
+
+ns       IN      A       127.0.0.1
+www      IN      A       127.0.0.2
+test-record     IN      TXT I_AM_A_TEST_RECORD
+subdomain.test     IN      A       127.0.0.3
